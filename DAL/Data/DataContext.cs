@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Model;
+using Model.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,6 @@ namespace DAL.Data
         }
         
         public DbSet<VehicleMake> VehicleMakes { get; set; }
-
+        public DbSet<VehicleModel> VehicleModels { get; set; }
     }
 }

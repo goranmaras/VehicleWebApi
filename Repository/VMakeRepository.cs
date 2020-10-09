@@ -14,11 +14,6 @@ namespace Repository
 {
     public class VMakeRepository : IVMakeRepository
     {
-        private static List<VehicleMake> vehicles = new List<VehicleMake>
-        {
-            new VehicleMake{Id=1,Name="FullName",Abrv="BMW"},
-            new VehicleMake{Id=2,Name="FullName",Abrv="Audi"}
-        };
         private readonly IMapper _mapper;
         private readonly DataContext _context;
 
