@@ -35,9 +35,13 @@ namespace VehiclesApi
             services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
                 optionsBuilder => optionsBuilder.MigrationsAssembly("VehiclesApi")));
             services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(opt =>
+            opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddAutoMapper(typeof(Startup));
             services.AddScoped<IVMakeRepository, VMakeRepository>();
             services.AddScoped<IVMakeService, VMakeService>();
+            services.AddScoped<IVModelRepository, VModelRepository>();
+            services.AddScoped<IVModelService, VModelService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
 using Model;
 using Model.Dtos;
+using Model.Dtos.VModelDto;
+using Model.Models;
+using Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +18,7 @@ namespace Repository
         {
             CreateMap<VehicleMake, GetVMakeDto>();
             CreateMap<AddVMakeDto, VehicleMake>();
+            CreateMap<VehicleModel, GetVModelDto>();
         }
     }
 }

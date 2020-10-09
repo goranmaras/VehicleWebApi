@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Model;
 using Model.Dtos;
+using Model.Dtos.VModelDto;
 using Repository.Common;
 using Service;
 using Service.Common;
@@ -16,23 +18,27 @@ namespace VehiclesApi.Controllers
     [ApiController]
     public class VehicleController : ControllerBase
     {
-        private readonly IVMakeService _service;
+        private readonly IVMakeService _makeService;
+        private readonly IVModelService _modelService;
+        private readonly IMapper _mapper;
 
-        public VehicleController(IVMakeService service)
+        public VehicleController(IVMakeService makeService, IVModelService modelService, IMapper mapper)
         {
-           _service = service;
+           _makeService = makeService;
+           _modelService = modelService;
+            _mapper = mapper;
         }
 
         [HttpGet("getall")]
         public async Task<IActionResult> GetAllVMakes()
         {
-            return Ok(await _service.GetAllVMakes());
+            return Ok(await _makeService.GetAllVMakes());
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetSingleVMake(int id)
         {
-            ServiceResponse<GetVMakeDto> response = await _service.GetVMakeById(id);
+            ServiceResponse<GetVMakeDto> response = await _makeService.GetVMakeById(id);
             if(response.Data == null)
             {
                 return NotFound(response);
@@ -44,13 +50,13 @@ namespace VehiclesApi.Controllers
         [HttpPost]
         public async Task<IActionResult> AddSingleVMake(AddVMakeDto newVMake)
         {
-            return Ok(await _service.AddVMake(newVMake));
+            return Ok(await _makeService.AddVMake(newVMake));
         }
 
         [HttpPut]
         public async Task<IActionResult> UpdateVMake(UpdateVMakeDto updatedVMake)
         {
-            ServiceResponse<GetVMakeDto> response = await _service.UpdateVMake(updatedVMake);
+            ServiceResponse<GetVMakeDto> response = await _makeService.UpdateVMake(updatedVMake);
             if (response.Data == null)
             {
                 return NotFound(response);
@@ -61,12 +67,27 @@ namespace VehiclesApi.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteVMake(int id)
         {
-            ServiceResponse<List<GetVMakeDto>> response = await _service.DeleteVMake(id);
+            ServiceResponse<List<GetVMakeDto>> response = await _makeService.DeleteVMake(id);
             if(response.Data == null)
             {
                 return NotFound(response);
             }
             return Ok(response);
+        }
+
+        [HttpGet("{makeId}/{id}")]
+        public async Task<IActionResult> GetSingleModel(int makeId, int id)
+        {
+            ServiceResponse<GetVModelDto> response = await _modelService.GetSingleVehicleModel(makeId, id);
+
+            if (response.Data == null)
+            {
+                return NotFound(response);
+            }
+
+            return Ok(response);
+
+
         }
 
     }
