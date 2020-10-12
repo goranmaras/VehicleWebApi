@@ -10,10 +10,10 @@ namespace Service.Common
 {
     public interface IVMakeService
     {
-        Task<ServiceResponse<List<GetVMakeDto>>> GetAllVMakes();
-        Task<ServiceResponse<GetVMakeDto>> GetVMakeById(int id);
-        Task<ServiceResponse<List<GetVMakeDto>>> AddVMake(AddVMakeDto newVMake);
-        Task<ServiceResponse<GetVMakeDto>> UpdateVMake(UpdateVMakeDto updatedVMake);
-        Task<ServiceResponse<List<GetVMakeDto>>> DeleteVMake(int id);
+        Task<List<GetVMakeDto>> GetAllVMakes();
+        Task<GetVMakeDto> GetVMakeById(int id);
+        Task<List<GetVMakeDto>> AddVMake(AddVMakeDto newVMake);
+        Task<GetVMakeDto> UpdateVMake(UpdateVMakeDto updatedVMake);
+        Task<List<GetVMakeDto>> DeleteVMake(int id);
     }
 }

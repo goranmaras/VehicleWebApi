@@ -22,17 +22,12 @@ namespace Service
             _repository = repository;
             _mapper = mapper;
         }
-        public async Task<ServiceResponse<GetVModelDto>> GetSingleVehicleModel(int makeId, int id) {
+        public async Task<GetVModelDto> GetSingleVehicleModel(int makeId, int id) {
 
-            ServiceResponse<GetVModelDto> serviceResponse = new ServiceResponse<GetVModelDto>();
-            serviceResponse.Data = await _repository.GetSingleVehicleModel(makeId,id);
+            GetVModelDto model = new GetVModelDto();
+            model = await _repository.GetSingleVehicleModel(makeId, id);
 
-            if (serviceResponse.Data == null)
-            {
-                serviceResponse.Success = false;
-                serviceResponse.Message = "No instance with that ID";
-            }
-            return serviceResponse;
+            return model;
         }
     }
 }

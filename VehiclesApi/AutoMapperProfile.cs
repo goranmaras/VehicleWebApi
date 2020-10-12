@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VehiclesApi.RestModels;
 
 namespace Repository
 {
@@ -17,8 +18,12 @@ namespace Repository
         public AutoMapperProfile()
         {
             CreateMap<VehicleMake, GetVMakeDto>();
+            CreateMap<GetVMakeDto, MakeRestResponse>();
             CreateMap<AddVMakeDto, VehicleMake>();
+            CreateMap<MakeRestResponse, AddVMakeDto>();
+            CreateMap<MakeRestResponse, GetVMakeDto>();
             CreateMap<VehicleModel, GetVModelDto>();
+            CreateMap<GetVModelDto, ModelRestResponse>();
         }
     }
 }

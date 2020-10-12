@@ -10,6 +10,6 @@ namespace Service.Common
 {
     public interface IVModelService
     {
-        Task<ServiceResponse<GetVModelDto>> GetSingleVehicleModel(int makeId, int id);
+        Task<GetVModelDto> GetSingleVehicleModel(int makeId, int id);
     }
 }

@@ -160,6 +160,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\DataContext.cs" />
+    <Compile Include="Migrations\20201008094108_InitilMigration.cs" />
+    <Compile Include="Migrations\20201008094108_InitilMigration.Designer.cs">
+      <DependentUpon>20201008094108_InitilMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20201009073049_VehicleModel.cs" />
+    <Compile Include="Migrations\20201009073049_VehicleModel.Designer.cs">
+      <DependentUpon>20201009073049_VehicleModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\DataContextModelSnapshot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

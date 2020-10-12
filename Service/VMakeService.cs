@@ -18,61 +18,42 @@ namespace Service
         {
             this.repository = repository;
         }
-        public async Task<ServiceResponse<List<GetVMakeDto>>> AddVMake(AddVMakeDto newVMake)
+        public async Task<List<GetVMakeDto>> AddVMake(AddVMakeDto newVMake)
         {
-            ServiceResponse<List<GetVMakeDto>> serviceResponse = new ServiceResponse<List<GetVMakeDto>>();
             await repository.AddVMake(newVMake);
-            serviceResponse.Data = await repository.GetAllVMakes();
-            return serviceResponse;
+            List<GetVMakeDto> newList = await repository.GetAllVMakes();
+            return newList;
         }
 
-        public async Task<ServiceResponse<List<GetVMakeDto>>> DeleteVMake(int id)
+        public async Task<List<GetVMakeDto>> DeleteVMake(int id)
         {
-            ServiceResponse<List<GetVMakeDto>> serviceResponse = new ServiceResponse<List<GetVMakeDto>>();
-            try
-            {
-                serviceResponse.Data = await repository.DeleteVMake(id);
-                serviceResponse.Message = "Successfully deleted!";
-            }
-            catch (Exception ex)
-            {
-                serviceResponse.Success = false;
-                serviceResponse.Message = ex.Message;
-            }
-            return serviceResponse;
-        }
-
-        public async Task<ServiceResponse<List<GetVMakeDto>>> GetAllVMakes()
-        {
-            ServiceResponse<List<GetVMakeDto>> serviceResponse = new ServiceResponse<List<GetVMakeDto>>();
-            serviceResponse.Data = await repository.GetAllVMakes();
-            return serviceResponse;
-        }
-
-        public async Task<ServiceResponse<GetVMakeDto>> GetVMakeById(int id)
-        {
-            ServiceResponse<GetVMakeDto> serviceResponse = new ServiceResponse<GetVMakeDto>();
-            serviceResponse.Data = await repository.GetVMakeById(id);
+            List<GetVMakeDto> listOfVMake = new List<GetVMakeDto>();
+            listOfVMake = await repository.DeleteVMake(id);
             
-            if(serviceResponse.Data == null)
-            {
-                serviceResponse.Success = false;
-                serviceResponse.Message = "No instance with that ID";
-            }
-            return serviceResponse;
+         
+            return listOfVMake;
         }
 
-        public async Task<ServiceResponse<GetVMakeDto>> UpdateVMake(UpdateVMakeDto updatedVMake)
+        public async Task<List<GetVMakeDto>> GetAllVMakes()
         {
-            ServiceResponse<GetVMakeDto> serviceResponse = new ServiceResponse<GetVMakeDto>();
-            try {
-                serviceResponse.Data = await repository.UpdateVMake(updatedVMake);
-            }
-            catch (Exception ex) {
-                serviceResponse.Success = false;
-                serviceResponse.Message = ex.Message;
-            }
-            return serviceResponse;
+            List<GetVMakeDto> allVMake = await repository.GetAllVMakes();
+            return allVMake;
+        }
+
+        public async Task<GetVMakeDto> GetVMakeById(int id)
+        {
+            
+            GetVMakeDto vMakeDto = await repository.GetVMakeById(id);
+            
+            return vMakeDto;
+        }
+
+        public async Task<GetVMakeDto> UpdateVMake(UpdateVMakeDto updatedVMake)
+        {
+            GetVMakeDto vMakeDto = new GetVMakeDto();
+            vMakeDto = await repository.UpdateVMake(updatedVMake);
+
+            return vMakeDto;
         }
     }
 }

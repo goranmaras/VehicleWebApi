@@ -172,7 +172,6 @@
     <Compile Include="Models\VehicleModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\VehicleMake.cs" />
-    <Compile Include="RestModels\VModelRest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

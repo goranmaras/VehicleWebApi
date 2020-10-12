@@ -168,7 +168,6 @@
     <Compile Include="IVMakeService.cs" />
     <Compile Include="IVModelService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ServiceResponse.cs" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
