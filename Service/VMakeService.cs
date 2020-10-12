@@ -1,5 +1,6 @@
 ﻿using Model;
 using Model.Dtos;
+using Model.Parameters;
 using Repository.Common;
 using Service.Common;
 using System;
@@ -21,7 +22,7 @@ namespace Service
         public async Task<List<GetVMakeDto>> AddVMake(AddVMakeDto newVMake)
         {
             await repository.AddVMake(newVMake);
-            List<GetVMakeDto> newList = await repository.GetAllVMakes();
+            List<GetVMakeDto> newList = await repository.GetAllVMakesWithoutParam();
             return newList;
         }
 
@@ -34,9 +35,9 @@ namespace Service
             return listOfVMake;
         }
 
-        public async Task<List<GetVMakeDto>> GetAllVMakes()
+        public async Task<List<GetVMakeDto>> GetAllVMakes(VMakesParameters vMakesParameters)
         {
-            List<GetVMakeDto> allVMake = await repository.GetAllVMakes();
+            List<GetVMakeDto> allVMake = await repository.GetAllVMakes(vMakesParameters);
             return allVMake;
         }
 

@@ -1,5 +1,6 @@
 ﻿using Model;
 using Model.Dtos;
+using Model.Parameters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace Service.Common
 {
     public interface IVMakeService
     {
-        Task<List<GetVMakeDto>> GetAllVMakes();
+        Task<List<GetVMakeDto>> GetAllVMakes(VMakesParameters vMakesParameters);
         Task<GetVMakeDto> GetVMakeById(int id);
         Task<List<GetVMakeDto>> AddVMake(AddVMakeDto newVMake);
         Task<GetVMakeDto> UpdateVMake(UpdateVMakeDto updatedVMake);

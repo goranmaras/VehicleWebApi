@@ -3,6 +3,7 @@ using DAL.Data;
 using Microsoft.EntityFrameworkCore;
 using Model;
 using Model.Dtos;
+using Model.Parameters;
 using Repository.Common;
 using System;
 using System.Collections.Generic;
@@ -39,7 +40,14 @@ namespace Repository
             return _context.VehicleMakes.Select(v => _mapper.Map<GetVMakeDto>(v)).ToList();
         }
 
-        public async Task<List<GetVMakeDto>> GetAllVMakes()
+        public async Task<List<GetVMakeDto>> GetAllVMakes(VMakesParameters vMakesParameters)
+        {
+            List<VehicleMake> dbVMakes = await _context.VehicleMakes.Skip((vMakesParameters.PageNumber - 1) * vMakesParameters.PageSize).
+                Take(vMakesParameters.PageSize).ToListAsync();
+            return dbVMakes.Select(v => _mapper.Map<GetVMakeDto>(v)).ToList();
+        }
+
+        public async Task<List<GetVMakeDto>> GetAllVMakesWithoutParam()
         {
             List<VehicleMake> dbVMakes = await _context.VehicleMakes.ToListAsync();
             return dbVMakes.Select(v => _mapper.Map<GetVMakeDto>(v)).ToList();

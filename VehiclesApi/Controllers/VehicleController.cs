@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Model;
 using Model.Dtos;
 using Model.Dtos.VModelDto;
+using Model.Parameters;
 using Repository.Common;
 using Service;
 using Service.Common;
@@ -29,9 +30,10 @@ namespace VehiclesApi.Controllers
         }
 
         [HttpGet("getall")]
-        public async Task<IActionResult> GetAllVMakes()
+        public async Task<IActionResult> GetAllVMakes([FromQuery] VMakesParameters vMakesParameters)
         {
-            List<MakeRestResponse> responses = _mapper.Map<List<MakeRestResponse>>(await _makeService.GetAllVMakes());
+            List<MakeRestResponse> responses = _mapper.Map<List<MakeRestResponse>>(await _makeService.GetAllVMakes(vMakesParameters));
+
             if(responses == null)
             {
                 return NotFound(responses);
