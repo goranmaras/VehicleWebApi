@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Model.Parameters
 {
-    public class VMakesParameters
+    public class Parameters
     {
         const int maxPageSize = 50;
         public int PageNumber { get; set; } = 1;

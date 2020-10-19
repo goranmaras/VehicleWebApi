@@ -170,6 +170,10 @@
     <Compile Include="VModelService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{0232f839-45d0-4fb1-b917-04e50439b395}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Model\Model.csproj">
       <Project>{4BA20B9E-4CF4-43CC-9990-0530665C6639}</Project>
       <Name>Model</Name>

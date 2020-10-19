@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
@@ -13,6 +15,7 @@ using Repository.Common;
 using Service;
 using Service.Common;
 using VehiclesApi.RestModels;
+using System.Net.Http.Formatting;
 
 namespace VehiclesApi.Controllers
 {
@@ -30,35 +33,50 @@ namespace VehiclesApi.Controllers
         }
 
         [HttpGet("getall")]
-        public async Task<IActionResult> GetAllVMakes([FromQuery] VMakesParameters vMakesParameters)
+        public async Task<IActionResult> FindAllVMakes([FromQuery] Parameters vMakesParameters)
         {
-            List<MakeRestResponse> responses = _mapper.Map<List<MakeRestResponse>>(await _makeService.GetAllVMakes(vMakesParameters));
-
-            if(responses == null)
+            List<MakeRestResponse> responses = _mapper.Map<List<MakeRestResponse>>(await _makeService.FindAllVMakes(vMakesParameters));
+            
+          
+            if (responses == null)
             {
                 return NotFound(responses);
             }
+
+
             return Ok(responses);
         }
 
+        //JoinGroupItem msg = new JoinGroupItem() { id = "001", Age = 26 };
+        //HttpResponseMessage response = new HttpResponseMessage();
+        //response.StatusCode = HttpStatusCode.OK;
+        //    response.ReasonPhrase = "SUCCESS";
+        //    response.Content = new ObjectContent<JoinGroupItem>(msg, new JsonMediaTypeFormatter(), "application/json");
+        //    return response;
+
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetSingleVMake(int id)
+        public async Task<HttpResponseMessage> GetSingleVMake(int id)
         {
            
             MakeRestResponse response = _mapper.Map<MakeRestResponse>(await _makeService.GetVMakeById(id));
-            if(response == null)
-            {
-                return NotFound(response);
-            }
 
-            return Ok(response);
+            var responseMessage = new HttpResponseMessage();
+
+            if (response == null)
+            {
+                responseMessage.StatusCode = HttpStatusCode.NotFound;
+                return responseMessage;
+            }
+            responseMessage.StatusCode = HttpStatusCode.OK;
+            responseMessage.Content = new ObjectContent<MakeRestResponse>(response, new JsonMediaTypeFormatter(), "application/json");
+            return responseMessage;
         }
 
         [HttpPost]
         public async Task<IActionResult> AddSingleVMake(AddVMakeDto newVMake)
         {
-            List<GetVMakeDto> serviceList = await _makeService.AddVMake(newVMake);
-            List<MakeRestResponse> response = _mapper.Map<List<MakeRestResponse>>(serviceList);
+            GetVMakeDto vMake = await _makeService.AddVMake(newVMake);
+            MakeRestResponse response = _mapper.Map<MakeRestResponse>(vMake);
             if (response == null)
             {
                 return NotFound(response);
@@ -84,7 +102,8 @@ namespace VehiclesApi.Controllers
         public async Task<IActionResult> DeleteVMake(int id)
         {
            
-            List<MakeRestResponse> response = _mapper.Map<List<MakeRestResponse>>(await _makeService.DeleteVMake(id));
+            MakeRestResponse response = _mapper.Map<MakeRestResponse>(await _makeService.DeleteVMake(id));
+
             if(response == null)
             {
                 return NotFound(response);

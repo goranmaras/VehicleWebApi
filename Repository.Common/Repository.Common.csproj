@@ -165,11 +165,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IVMakeRepository.cs" />
-    <Compile Include="IVModelRepository.cs" />
+    <Compile Include="IRepo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{0232f839-45d0-4fb1-b917-04e50439b395}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Model\Model.csproj">
       <Project>{4ba20b9e-4cf4-43cc-9990-0530665c6639}</Project>
       <Name>Model</Name>

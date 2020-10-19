@@ -1,5 +1,6 @@
 ﻿using Model;
 using Model.Dtos;
+using Model.Helpers;
 using Model.Parameters;
 using Repository.Common;
 using Service.Common;
@@ -13,31 +14,29 @@ namespace Service
 {
     public class VMakeService : IVMakeService
     {
-        private readonly IVMakeRepository repository;
+        private readonly IRepo repository;
 
-        public VMakeService(IVMakeRepository repository)
+        public VMakeService(IRepo repository)
         {
             this.repository = repository;
         }
-        public async Task<List<GetVMakeDto>> AddVMake(AddVMakeDto newVMake)
+        public async Task<GetVMakeDto> AddVMake(AddVMakeDto newVMake)
         {
-            await repository.AddVMake(newVMake);
-            List<GetVMakeDto> newList = await repository.GetAllVMakesWithoutParam();
-            return newList;
+            GetVMakeDto vMake = await repository.AddVMake(newVMake);
+            return vMake;
         }
 
-        public async Task<List<GetVMakeDto>> DeleteVMake(int id)
+        public async Task<GetVMakeDto> DeleteVMake(int id)
         {
-            List<GetVMakeDto> listOfVMake = new List<GetVMakeDto>();
+            GetVMakeDto listOfVMake = new GetVMakeDto();
             listOfVMake = await repository.DeleteVMake(id);
             
-         
             return listOfVMake;
         }
 
-        public async Task<List<GetVMakeDto>> GetAllVMakes(VMakesParameters vMakesParameters)
+        public async Task<List<GetVMakeDto>> FindAllVMakes(Parameters vMakesParameters)
         {
-            List<GetVMakeDto> allVMake = await repository.GetAllVMakes(vMakesParameters);
+            List<GetVMakeDto> allVMake = await repository.FindAllVMakes(vMakesParameters);
             return allVMake;
         }
 
