@@ -41,6 +41,7 @@ namespace VehiclesApi
             services.AddScoped<IRepo, VehicleRepo>();
             services.AddScoped<IVMakeService, VMakeService>();
             services.AddScoped<IVModelService, VModelService>();
+            services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

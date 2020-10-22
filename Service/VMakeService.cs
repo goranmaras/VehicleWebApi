@@ -15,10 +15,12 @@ namespace Service
     public class VMakeService : IVMakeService
     {
         private readonly IRepo repository;
+        private readonly IRepositoryWrapper _repositoryWrapper;
 
-        public VMakeService(IRepo repository)
+        public VMakeService(IRepo repository, IRepositoryWrapper repositoryWrapper)
         {
             this.repository = repository;
+           _repositoryWrapper = repositoryWrapper;
         }
         public async Task<GetVMakeDto> AddVMake(AddVMakeDto newVMake)
         {
@@ -36,7 +38,11 @@ namespace Service
 
         public async Task<List<GetVMakeDto>> FindAllVMakes(Parameters vMakesParameters)
         {
-            List<GetVMakeDto> allVMake = await repository.FindAllVMakes(vMakesParameters);
+            
+            //List<GetVMakeDto> allVMake = await repository.FindAllVMakes(vMakesParameters);
+            //return allVMake;
+
+            List<GetVMakeDto> allVMake = await _repositoryWrapper.VehicleMake.FindAllVMakes(vMakesParameters);
             return allVMake;
         }
 

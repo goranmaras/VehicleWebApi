@@ -47,29 +47,19 @@ namespace VehiclesApi.Controllers
             return Ok(responses);
         }
 
-        //JoinGroupItem msg = new JoinGroupItem() { id = "001", Age = 26 };
-        //HttpResponseMessage response = new HttpResponseMessage();
-        //response.StatusCode = HttpStatusCode.OK;
-        //    response.ReasonPhrase = "SUCCESS";
-        //    response.Content = new ObjectContent<JoinGroupItem>(msg, new JsonMediaTypeFormatter(), "application/json");
-        //    return response;
-
         [HttpGet("{id}")]
-        public async Task<HttpResponseMessage> GetSingleVMake(int id)
+        public async Task<IActionResult> GetSingleVMake(int id)
         {
            
             MakeRestResponse response = _mapper.Map<MakeRestResponse>(await _makeService.GetVMakeById(id));
 
-            var responseMessage = new HttpResponseMessage();
-
             if (response == null)
             {
-                responseMessage.StatusCode = HttpStatusCode.NotFound;
-                return responseMessage;
+                
+                return NotFound(response);
             }
-            responseMessage.StatusCode = HttpStatusCode.OK;
-            responseMessage.Content = new ObjectContent<MakeRestResponse>(response, new JsonMediaTypeFormatter(), "application/json");
-            return responseMessage;
+            
+            return Ok(response);
         }
 
         [HttpPost]
@@ -77,6 +67,7 @@ namespace VehiclesApi.Controllers
         {
             GetVMakeDto vMake = await _makeService.AddVMake(newVMake);
             MakeRestResponse response = _mapper.Map<MakeRestResponse>(vMake);
+
             if (response == null)
             {
                 return NotFound(response);
