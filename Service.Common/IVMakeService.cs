@@ -1,4 +1,5 @@
-﻿using Model;
+﻿using Common.Parameters;
+using Model;
 using Model.Dtos;
 using Model.Helpers;
 using Model.Parameters;
@@ -12,7 +13,7 @@ namespace Service.Common
 {
     public interface IVMakeService
     {
-        Task<List<GetVMakeDto>> FindAllVMakes(Parameters vMakesParameters);
+        Task<List<GetVMakeDto>> FindAllVMakes(VMakeParameters vMakesParameters);
         Task<GetVMakeDto> GetVMakeById(int id);
         Task<GetVMakeDto> AddVMake(AddVMakeDto newVMake);
         Task<GetVMakeDto> UpdateVMake(UpdateVMakeDto updatedVMake);

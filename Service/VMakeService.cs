@@ -1,4 +1,5 @@
-﻿using Model;
+﻿using Common.Parameters;
+using Model;
 using Model.Dtos;
 using Model.Helpers;
 using Model.Parameters;
@@ -36,7 +37,7 @@ namespace Service
             return listOfVMake;
         }
 
-        public async Task<List<GetVMakeDto>> FindAllVMakes(Parameters vMakesParameters)
+        public async Task<List<GetVMakeDto>> FindAllVMakes(VMakeParameters vMakesParameters)
         {
             
             //List<GetVMakeDto> allVMake = await repository.FindAllVMakes(vMakesParameters);

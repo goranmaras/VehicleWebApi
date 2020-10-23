@@ -16,6 +16,7 @@ using Service;
 using Service.Common;
 using VehiclesApi.RestModels;
 using System.Net.Http.Formatting;
+using Common.Parameters;
 
 namespace VehiclesApi.Controllers
 {
@@ -33,11 +34,15 @@ namespace VehiclesApi.Controllers
         }
 
         [HttpGet("getall")]
-        public async Task<IActionResult> FindAllVMakes([FromQuery] Parameters vMakesParameters)
+        public async Task<IActionResult> FindAllVMakes([FromQuery] VMakeParameters vMakesParameters)
         {
+            if (!vMakesParameters.ValidAbrvSize)
+            {
+                return BadRequest("Abrv size cannot be less than 3 characters");
+            }
+
             List<MakeRestResponse> responses = _mapper.Map<List<MakeRestResponse>>(await _makeService.FindAllVMakes(vMakesParameters));
-            
-          
+
             if (responses == null)
             {
                 return NotFound(responses);

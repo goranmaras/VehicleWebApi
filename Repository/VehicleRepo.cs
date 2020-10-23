@@ -44,7 +44,7 @@ namespace Repository
             return _mapper.Map<GetVMakeDto>(vehicleMake);
         }
 
-        public async Task<List<GetVMakeDto>> FindAllVMakes(Parameters vMakesParameters)
+        public async Task<List<GetVMakeDto>> FindAllVMakes(QueryStringParameters vMakesParameters)
         {
             List<VehicleMake> dbVMakes = await _context.VehicleMakes.Skip((vMakesParameters.PageNumber - 1) * vMakesParameters.PageSize).
                 Take(vMakesParameters.PageSize).ToListAsync();
