@@ -11,7 +11,7 @@ namespace Repository.Common
 {
     public interface IRepo
     {
-        Task<List<GetVMakeDto>> FindAllVMakes(QueryStringParameters vMakesParameters);
+        Task<List<GetVMakeDto>> FindAllVMakes(Pagination vMakesParameters);
         Task<GetVMakeDto> GetVMakeById(int id);
         Task<GetVMakeDto> AddVMake(AddVMakeDto newVMake);
         Task<GetVMakeDto> UpdateVMake(UpdateVMakeDto updatedVMake);

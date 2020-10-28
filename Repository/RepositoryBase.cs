@@ -50,56 +50,70 @@ namespace Repository
             //return dbVMakes.Select(v => _mapper.Map<GetVMakeDto>(v)).ToList();
 
             //-----Before and after adding the PagedList<T> !!!!------
-            var vMakes = await _context.VehicleMakes.ToListAsync();
-            vMakes.Find(v => v.Abrv.Length > vMakesParameters.AbrvSize);
+            var vMakes = _context.VehicleMakes.AsQueryable();
 
-            var queryable = vMakes.AsQueryable();
-            ApplySort(ref queryable, vMakesParameters.OrderBy);
+            vMakes = sortedQuery(vMakesParameters, vMakes);
 
-            var sortedList = queryable.ToList();
+            vMakes = filterQueryByAbrvSize(vMakes, vMakesParameters);
 
-            var paged = PagedList<VehicleMake>.ToPagedList(sortedList, vMakesParameters.PageNumber, vMakesParameters.PageSize);
+            var paged = PagedList<VehicleMake>.ToPagedList(await vMakes.ToListAsync(), vMakesParameters.PageNumber, vMakesParameters.PageSize);
 
             return _mapper.Map<List<GetVMakeDto>>(paged);
         }
 
-        private void ApplySort(ref IQueryable<VehicleMake> vMakes, string orderByQueryString)
+        private static IQueryable<VehicleMake> filterQueryByAbrvSize(IQueryable<VehicleMake> vMakes, VMakeParameters vMakeParameters)
         {
-            if (!vMakes.Any())
-                return;
-
-            if (string.IsNullOrWhiteSpace(orderByQueryString))
-            {
-                vMakes = vMakes.OrderBy(x => x.Name);
-                return;
-            }
-
-            var orderParams = orderByQueryString.Trim().Split(',');
-            var propertyInfos = typeof(VehicleMake).GetProperties(BindingFlags.Public | BindingFlags.Instance);
-            var orderQueryBuilder = new StringBuilder();
-
-            foreach (var param in orderParams)
-            {
-                if (string.IsNullOrWhiteSpace(param))
-                    continue;
-
-                var propertyFromQueryName = param.Split(' ')[0];
-                var objectProperty = propertyInfos.FirstOrDefault(pi => pi.Name.Equals(propertyFromQueryName, StringComparison.InvariantCultureIgnoreCase));
-                if (objectProperty == null)
-                    continue;
-
-                var sortingOrder = param.EndsWith(" desc") ? "descending" : "ascending";
-                orderQueryBuilder.Append($"{objectProperty.Name.ToString()} {sortingOrder}, ");
-            }
-            var orderQuery = orderQueryBuilder.ToString().TrimEnd(',', ' ');
-            if (string.IsNullOrWhiteSpace(orderQuery))
-            {
-                vMakes = vMakes.OrderBy(x => x.Name);
-                return;
-            }
-            //NEEDS System.Linq.Dynamic.Core NugetPackage !!!!------
-            vMakes = vMakes.OrderBy(orderQuery);
+            var filterByName = from a in vMakes where a.Name == vMakeParameters.FilterByName select a;
+            return filterByName;
         }
+
+        private static IQueryable<VehicleMake> sortedQuery(VMakeParameters vMakesParameters, IQueryable<VehicleMake> vMakes)
+        {
+            if (!string.IsNullOrEmpty(vMakesParameters.SortBy))
+            {
+                vMakes = vMakes.OrderBy(vMakesParameters.SortBy);
+            }
+
+            return vMakes;
+        }
+
+        //private void ApplySort(ref IQueryable<VehicleMake> vMakes, string orderByQueryString)
+        //{
+        //    if (!vMakes.Any())
+        //        return;
+
+        //    if (string.IsNullOrWhiteSpace(orderByQueryString))
+        //    {
+        //        vMakes = vMakes.OrderBy(x => x.Name);
+        //        return;
+        //    }
+
+        //    var orderParams = orderByQueryString.Trim().Split(',');
+        //    var propertyInfos = typeof(VehicleMake).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+        //    var orderQueryBuilder = new StringBuilder();
+
+        //    foreach (var param in orderParams)
+        //    {
+        //        if (string.IsNullOrWhiteSpace(param))
+        //            continue;
+
+        //        var propertyFromQueryName = param.Split(' ')[0];
+        //        var objectProperty = propertyInfos.FirstOrDefault(pi => pi.Name.Equals(propertyFromQueryName, StringComparison.InvariantCultureIgnoreCase));
+        //        if (objectProperty == null)
+        //            continue;
+
+        //        var sortingOrder = param.EndsWith(" desc") ? "descending" : "ascending";
+        //        orderQueryBuilder.Append($"{objectProperty.Name.ToString()} {sortingOrder}, ");
+        //    }
+        //    var orderQuery = orderQueryBuilder.ToString().TrimEnd(',', ' ');
+        //    if (string.IsNullOrWhiteSpace(orderQuery))
+        //    {
+        //        vMakes = vMakes.OrderBy(x => x.Name);
+        //        return;
+        //    }
+        //    //NEEDS System.Linq.Dynamic.Core NugetPackage !!!!------
+        //    vMakes = vMakes.OrderBy(orderQuery);
+        //}
 
         public Task<GetVModelDto> GetSingleVModel(int makeId, int id)
         {

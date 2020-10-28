@@ -36,20 +36,16 @@ namespace VehiclesApi.Controllers
         [HttpGet("getall")]
         public async Task<IActionResult> FindAllVMakes([FromQuery] VMakeParameters vMakesParameters)
         {
-            if (!vMakesParameters.ValidAbrvSize)
-            {
-                return BadRequest("Abrv size cannot be less than 3 characters");
-            }
+            
+            List<MakeRestResponse> response = _mapper.Map<List<MakeRestResponse>>(await _makeService.FindAllVMakes(vMakesParameters));
 
-            List<MakeRestResponse> responses = _mapper.Map<List<MakeRestResponse>>(await _makeService.FindAllVMakes(vMakesParameters));
-
-            if (responses == null)
+            if (response == null)
             {
-                return NotFound(responses);
+                return NotFound(response);
             }
 
 
-            return Ok(responses);
+            return Ok(response);
         }
 
         [HttpGet("{id}")]

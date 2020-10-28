@@ -7,17 +7,14 @@ using System.Threading.Tasks;
 
 namespace Common.Parameters
 {
-    public class VMakeParameters : QueryStringParameters
+    public class VMakeParameters : Pagination
     {
         public VMakeParameters()
         {
-            OrderBy = "name";
+            SortBy = "";
         }
 
-        public uint AbrvSize { get; set; }
+        public string FilterByName { get; set; }
 
-        public bool ValidAbrvSize => AbrvSize > 2;
-
-        public string Name { get; set; }
     }
 }

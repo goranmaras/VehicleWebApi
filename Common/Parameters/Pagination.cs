@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Model.Parameters
 {
     //-----FOR BroadCase Use Make this class abstract so that others implement it for each controller use case!! -----
-    public abstract class QueryStringParameters
+    public abstract class Pagination
     {
         const int maxPageSize = 50;
         public int PageNumber { get; set; } = 1;
@@ -24,6 +24,6 @@ namespace Model.Parameters
             }
         }
 
-        public string OrderBy { get; set; }
+        public string SortBy { get; set; }
     }
 }

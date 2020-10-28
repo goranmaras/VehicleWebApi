@@ -44,7 +44,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Parameters\QueryStringParameters.cs" />
+    <Compile Include="Parameters\Filtering.cs" />
+    <Compile Include="Parameters\Pagination.cs" />
+    <Compile Include="Parameters\Sorting.cs" />
     <Compile Include="Parameters\VMakeParameters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
