@@ -54,14 +54,17 @@ namespace Repository
 
             vMakes = sortedQuery(vMakesParameters, vMakes);
 
-            vMakes = filterQueryByAbrvSize(vMakes, vMakesParameters);
+            if (!string.IsNullOrEmpty(vMakesParameters.FilterByName))
+            {
+                vMakes = filterQueryByName(vMakes, vMakesParameters);
+            }
 
             var paged = PagedList<VehicleMake>.ToPagedList(await vMakes.ToListAsync(), vMakesParameters.PageNumber, vMakesParameters.PageSize);
 
             return _mapper.Map<List<GetVMakeDto>>(paged);
         }
 
-        private static IQueryable<VehicleMake> filterQueryByAbrvSize(IQueryable<VehicleMake> vMakes, VMakeParameters vMakeParameters)
+        private static IQueryable<VehicleMake> filterQueryByName(IQueryable<VehicleMake> vMakes, VMakeParameters vMakeParameters)
         {
             var filterByName = from a in vMakes where a.Name == vMakeParameters.FilterByName select a;
             return filterByName;
