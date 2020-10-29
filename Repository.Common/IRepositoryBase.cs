@@ -16,8 +16,8 @@ namespace Repository.Common
     {
         Task<List<GetVMakeDto>> FindAllVMakes(VMakeParameters vMakesParameters);
         Task<GetVMakeDto> GetVMakeById(int id);
-        Task<GetVMakeDto> AddVMake(T newVMake);
-        Task<GetVMakeDto> UpdateVMake(T updatedVMake);
+        Task<GetVMakeDto> AddVMake(AddVMakeDto newVMake);
+        Task<GetVMakeDto> UpdateVMake(UpdateVMakeDto updatedVMake);
         Task<GetVMakeDto> DeleteVMake(int id);
         Task<GetVModelDto> GetSingleVModel(int makeId, int id);
     }

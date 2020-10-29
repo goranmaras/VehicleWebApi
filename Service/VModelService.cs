@@ -14,18 +14,18 @@ namespace Service
 {
     public class VModelService : IVModelService
     {
-        private readonly IRepo _repository;
+        private readonly IRepositoryWrapper _repositoryWrapper;
         private readonly IMapper _mapper;
 
-        public VModelService(IRepo repository, IMapper mapper)
+        public VModelService(IRepositoryWrapper repositoryWrapper, IMapper mapper)
         {
-            _repository = repository;
+            _repositoryWrapper = repositoryWrapper;
             _mapper = mapper;
         }
         public async Task<GetVModelDto> GetSingleVehicleModel(int makeId, int id) {
 
-            GetVModelDto model = new GetVModelDto();
-            model = await _repository.GetSingleVModel(makeId, id);
+            
+            var model = await _repositoryWrapper.VehicleModel.GetSingleVModel(makeId, id);
 
             return model;
         }

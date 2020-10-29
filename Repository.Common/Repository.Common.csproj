@@ -168,10 +168,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IRepo.cs" />
     <Compile Include="IRepositoryBase.cs" />
     <Compile Include="IRepositoryWrapper.cs" />
     <Compile Include="IVMakeRepo.cs" />
+    <Compile Include="IVModelRepo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

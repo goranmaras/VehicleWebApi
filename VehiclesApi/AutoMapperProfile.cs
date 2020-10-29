@@ -23,7 +23,7 @@ namespace Repository
             CreateMap<MakeRestResponse, AddVMakeDto>();
             CreateMap<MakeRestResponse, GetVMakeDto>();
             CreateMap<VehicleModel, GetVModelDto>();
-            CreateMap<GetVModelDto, ModelRestResponse>();
+            CreateMap<GetVModelDto, ModelRestResponse>().ReverseMap();
         }
     }
 }

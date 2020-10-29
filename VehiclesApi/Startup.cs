@@ -38,7 +38,6 @@ namespace VehiclesApi
             services.AddControllers().AddNewtonsoftJson(opt =>
             opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddAutoMapper(typeof(Startup));
-            services.AddScoped<IRepo, VehicleRepo>();
             services.AddScoped<IVMakeService, VMakeService>();
             services.AddScoped<IVModelService, VModelService>();
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();

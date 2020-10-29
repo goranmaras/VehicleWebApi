@@ -171,8 +171,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RepositoryBase.cs" />
     <Compile Include="RepositoryWrapper.cs" />
-    <Compile Include="VehicleRepo.cs" />
     <Compile Include="VMakeRepo.cs" />
+    <Compile Include="VModelRepo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">

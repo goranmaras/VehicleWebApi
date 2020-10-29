@@ -7,6 +7,7 @@ using Model;
 using Model.Dtos;
 using Model.Dtos.VModelDto;
 using Model.Helpers;
+using Model.Models;
 using Model.Parameters;
 using Repository.Common;
 using System;
@@ -33,14 +34,22 @@ namespace Repository
             _mapper = mapper;
         }
 
-        public Task<GetVMakeDto> AddVMake(T newVMake)
+        public async Task<GetVMakeDto> AddVMake(AddVMakeDto newVMake)
         {
-            throw new NotImplementedException();
+            VehicleMake vehicleMake = _mapper.Map<VehicleMake>(newVMake);
+            await _context.VehicleMakes.AddAsync(vehicleMake);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<GetVMakeDto>(vehicleMake);
         }
 
-        public Task<GetVMakeDto> DeleteVMake(int id)
+        public async Task<GetVMakeDto> DeleteVMake(int id)
         {
-            throw new NotImplementedException();
+            VehicleMake vehicleMake = await _context.VehicleMakes.FirstAsync(v => v.Id == id);
+            _context.VehicleMakes.Remove(vehicleMake);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<GetVMakeDto>(vehicleMake);
         }
 
         public async Task<List<GetVMakeDto>> FindAllVMakes(VMakeParameters vMakesParameters)
@@ -118,19 +127,41 @@ namespace Repository
         //    vMakes = vMakes.OrderBy(orderQuery);
         //}
 
-        public Task<GetVModelDto> GetSingleVModel(int makeId, int id)
+        public async Task<GetVModelDto> GetSingleVModel(int makeId, int id)
         {
-            throw new NotImplementedException();
+            VehicleMake vehicleMakeDb = await _context.VehicleMakes.Include(v => v.VehicleModels).FirstOrDefaultAsync(v => v.Id == makeId);
+            VehicleModel vehicleModelDb = vehicleMakeDb.VehicleModels.FirstOrDefault(v => v.Id == id);
+            return _mapper.Map<GetVModelDto>(vehicleModelDb);
         }
 
-        public Task<GetVMakeDto> GetVMakeById(int id)
+        public async Task<GetVMakeDto> GetVMakeById(int id)
         {
-            throw new NotImplementedException();
+            VehicleMake vehicleMakeDb = await _context.VehicleMakes.FirstOrDefaultAsync(v => v.Id == id);
+
+            return _mapper.Map<GetVMakeDto>(vehicleMakeDb);
         }
 
-        public Task<GetVMakeDto> UpdateVMake(T updatedVMake)
+        public async Task<GetVMakeDto> UpdateVMake(UpdateVMakeDto updatedVMake)
         {
-            throw new NotImplementedException();
+
+            VehicleMake vehicleMake = await _context.VehicleMakes.FirstOrDefaultAsync(v => v.Id == updatedVMake.Id);
+
+            if (vehicleMake==null)
+            {
+               return _mapper.Map<GetVMakeDto>(vehicleMake);
+            }
+            else
+            {
+                vehicleMake.Name = updatedVMake.Name;
+                vehicleMake.Abrv = updatedVMake.Abrv;
+
+                _context.VehicleMakes.Update(vehicleMake);
+                await _context.SaveChangesAsync();
+
+                return _mapper.Map<GetVMakeDto>(vehicleMake);
+            }
+
+           
         }
     }
 }

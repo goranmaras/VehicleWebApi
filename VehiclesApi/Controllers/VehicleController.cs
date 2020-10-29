@@ -80,7 +80,7 @@ namespace VehiclesApi.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateVMake(UpdateVMakeDto updatedVMake)
         {
-            
+
             GetVMakeDto vMake = await _makeService.UpdateVMake(updatedVMake);
             MakeRestResponse response = _mapper.Map<MakeRestResponse>(vMake);
             if (response == null)

@@ -14,6 +14,7 @@ namespace Repository
         private readonly DataContext _dataContext;
         private readonly IMapper _mapper;
         private IVMakeRepo _vMakeRepo;
+        private IVModelRepo _vModelRepo;
 
         public IVMakeRepo VehicleMake
         {
@@ -25,6 +26,19 @@ namespace Repository
                 }
 
                 return _vMakeRepo;
+            }
+        }
+
+        public IVModelRepo VehicleModel
+        {
+            get
+            {
+                if(_vModelRepo == null)
+                {
+                    _vModelRepo = new VModelRepo(_dataContext, _mapper);
+                }
+
+                return _vModelRepo;
             }
         }
 
