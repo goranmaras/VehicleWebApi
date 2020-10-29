@@ -172,7 +172,6 @@
     <Compile Include="Dtos\GetVMakeDto.cs" />
     <Compile Include="Dtos\UpdateVMakeDto.cs" />
     <Compile Include="Dtos\GetVModelDto.cs" />
-    <Compile Include="Helpers\PagedList.cs" />
     <Compile Include="Models\VehicleModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\VehicleMake.cs" />

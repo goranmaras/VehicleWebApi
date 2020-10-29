@@ -1,8 +1,6 @@
 ﻿using Common.Parameters;
 using Model;
 using Model.Dtos;
-using Model.Helpers;
-using Model.Parameters;
 using Repository.Common;
 using Service.Common;
 using System;
@@ -36,7 +34,7 @@ namespace Service
             return vMakeDto;
         }
 
-        public async Task<List<GetVMakeDto>> FindAllVMakes(SortParameters sortParameters, FilterParameters filterParameters, PageParameters pageParameters)
+        public async Task<List<GetVMakeDto>> FindAllVMakes(ISortParameters sortParameters, IFilterParameters filterParameters, IPageParameters pageParameters)
         {
 
             List<GetVMakeDto> allVMake = await _repositoryWrapper.VehicleMake.FindAllVMakes(sortParameters,filterParameters,pageParameters);

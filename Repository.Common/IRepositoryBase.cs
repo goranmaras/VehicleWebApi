@@ -1,8 +1,6 @@
 ﻿using Common.Parameters;
 using Model.Dtos;
 using Model.Dtos.VModelDto;
-using Model.Helpers;
-using Model.Parameters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +12,7 @@ namespace Repository.Common
 {
     public interface IRepositoryBase<T> 
     {
-        Task<List<GetVMakeDto>> FindAllVMakes(SortParameters sortParameters, FilterParameters filterParameters, PageParameters pageParameters);
+        Task<List<GetVMakeDto>> FindAllVMakes(ISortParameters sortParameters, IFilterParameters filterParameters, IPageParameters pageParameters);
         Task<GetVMakeDto> GetVMakeById(int id);
         Task<GetVMakeDto> AddVMake(AddVMakeDto newVMake);
         Task<GetVMakeDto> UpdateVMake(UpdateVMakeDto updatedVMake);

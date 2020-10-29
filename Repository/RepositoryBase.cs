@@ -7,9 +7,7 @@ using Microsoft.EntityFrameworkCore.Internal;
 using Model;
 using Model.Dtos;
 using Model.Dtos.VModelDto;
-using Model.Helpers;
 using Model.Models;
-using Model.Parameters;
 using Repository.Common;
 using System;
 using System.Collections.Generic;
@@ -53,7 +51,7 @@ namespace Repository
             return _mapper.Map<GetVMakeDto>(vehicleMake);
         }
 
-        public async Task<List<GetVMakeDto>> FindAllVMakes(SortParameters sortParameters, FilterParameters filterParameters, PageParameters pageParameters)
+        public async Task<List<GetVMakeDto>> FindAllVMakes(ISortParameters sortParameters, IFilterParameters filterParameters, IPageParameters pageParameters)
         {
             var vMakes = _context.VehicleMakes.AsQueryable();
 
@@ -78,7 +76,7 @@ namespace Repository
 
         }
 
-        private IQueryable<VehicleMake> sort(SortParameters sortParameters, IQueryable<VehicleMake> vMakes)
+        private IQueryable<VehicleMake> sort(ISortParameters sortParameters, IQueryable<VehicleMake> vMakes)
         {
             switch (sortParameters.SortOrder)
             {
@@ -106,7 +104,7 @@ namespace Repository
             return vMakes;
         }
 
-        private IQueryable<VehicleMake> filterByFilterString(FilterParameters filterParameters)
+        private IQueryable<VehicleMake> filterByFilterString(IFilterParameters filterParameters)
         {
             IQueryable<VehicleMake> vehicleMakes;
             if (!string.IsNullOrEmpty(filterParameters.FilterString))
@@ -121,7 +119,7 @@ namespace Repository
             return vehicleMakes;
         }
 
-        private static void checkIfFilterStringIsNull(FilterParameters filterParameters, PageParameters pageParameters)
+        private static void checkIfFilterStringIsNull(IFilterParameters filterParameters, IPageParameters pageParameters)
         {
             if (filterParameters.FilterString != null)
             {
