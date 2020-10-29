@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Common;
 using Common.Parameters;
 using DAL.Data;
 using Microsoft.EntityFrameworkCore;
@@ -52,80 +53,85 @@ namespace Repository
             return _mapper.Map<GetVMakeDto>(vehicleMake);
         }
 
-        public async Task<List<GetVMakeDto>> FindAllVMakes(VMakeParameters vMakesParameters)
+        public async Task<List<GetVMakeDto>> FindAllVMakes(SortParameters sortParameters, FilterParameters filterParameters, PageParameters pageParameters)
         {
-            //List<T> dbVMakes = await _context.Set<T>().Skip((vMakesParameters.PageNumber - 1) * vMakesParameters.PageSize).
-            //    Take(vMakesParameters.PageSize).ToListAsync();
-            //return dbVMakes.Select(v => _mapper.Map<GetVMakeDto>(v)).ToList();
-
-            //-----Before and after adding the PagedList<T> !!!!------
             var vMakes = _context.VehicleMakes.AsQueryable();
 
-            vMakes = sortedQuery(vMakesParameters, vMakes);
-
-            if (!string.IsNullOrEmpty(vMakesParameters.FilterByName))
+            using (_context)
             {
-                vMakes = filterQueryByName(vMakes, vMakesParameters);
+                try
+                {
+                    checkIfFilterStringIsNull(filterParameters, pageParameters);
+
+                    vMakes = filterByFilterString(filterParameters);
+
+                    vMakes = sort(sortParameters, vMakes);
+
+                    return _mapper.Map<List<GetVMakeDto>>(await PagingList<VehicleMake>.CreateAsync(vMakes, pageParameters.PageNumber, pageParameters.PageSize ?? 5));
+                }
+                catch (Exception e)
+                {
+                    return null;
+                }
+
             }
 
-            var paged = PagedList<VehicleMake>.ToPagedList(await vMakes.ToListAsync(), vMakesParameters.PageNumber, vMakesParameters.PageSize);
-
-            return _mapper.Map<List<GetVMakeDto>>(paged);
         }
 
-        private static IQueryable<VehicleMake> filterQueryByName(IQueryable<VehicleMake> vMakes, VMakeParameters vMakeParameters)
+        private IQueryable<VehicleMake> sort(SortParameters sortParameters, IQueryable<VehicleMake> vMakes)
         {
-            var filterByName = from a in vMakes where a.Name == vMakeParameters.FilterByName select a;
-            return filterByName;
-        }
-
-        private static IQueryable<VehicleMake> sortedQuery(VMakeParameters vMakesParameters, IQueryable<VehicleMake> vMakes)
-        {
-            if (!string.IsNullOrEmpty(vMakesParameters.SortBy))
+            switch (sortParameters.SortOrder)
             {
-                vMakes = vMakes.OrderBy(vMakesParameters.SortBy);
+                case "name_asc":
+                    vMakes = vMakes != null ? vMakes.OrderBy(m => m.Name).AsQueryable() : _context.VehicleMakes.OrderBy(m => m.Name).AsQueryable();
+                    break;
+
+                case "name_desc":
+                    vMakes = vMakes != null ? vMakes.OrderByDescending(m => m.Name).AsQueryable() : _context.VehicleMakes.OrderByDescending(m => m.Name).AsQueryable();
+                    break;
+
+                case "abrv_asc":
+                    vMakes = vMakes != null ? vMakes.OrderBy(m => m.Abrv).AsQueryable() : _context.VehicleMakes.OrderBy(m => m.Abrv).AsQueryable();
+                    break;
+
+                case "abrv_desc":
+                    vMakes = vMakes != null ? vMakes.OrderByDescending(m => m.Abrv).AsQueryable() : _context.VehicleMakes.OrderByDescending(m => m.Abrv).AsQueryable();
+                    break;
+
+                default:
+                    vMakes = vMakes != null ? vMakes.OrderBy(m => m.Name).AsQueryable() : _context.VehicleMakes.OrderByDescending(m => m.Name).AsQueryable();
+                    break;
             }
 
             return vMakes;
         }
 
-        //private void ApplySort(ref IQueryable<VehicleMake> vMakes, string orderByQueryString)
-        //{
-        //    if (!vMakes.Any())
-        //        return;
+        private IQueryable<VehicleMake> filterByFilterString(FilterParameters filterParameters)
+        {
+            IQueryable<VehicleMake> vehicleMakes;
+            if (!string.IsNullOrEmpty(filterParameters.FilterString))
+            {
+                vehicleMakes = _context.VehicleMakes.Where(v => v.Name.Contains(filterParameters.FilterString) || v.Abrv.Contains(filterParameters.FilterString)).AsQueryable();
+            }
+            else
+            {
+                vehicleMakes = null;
+            }
 
-        //    if (string.IsNullOrWhiteSpace(orderByQueryString))
-        //    {
-        //        vMakes = vMakes.OrderBy(x => x.Name);
-        //        return;
-        //    }
+            return vehicleMakes;
+        }
 
-        //    var orderParams = orderByQueryString.Trim().Split(',');
-        //    var propertyInfos = typeof(VehicleMake).GetProperties(BindingFlags.Public | BindingFlags.Instance);
-        //    var orderQueryBuilder = new StringBuilder();
-
-        //    foreach (var param in orderParams)
-        //    {
-        //        if (string.IsNullOrWhiteSpace(param))
-        //            continue;
-
-        //        var propertyFromQueryName = param.Split(' ')[0];
-        //        var objectProperty = propertyInfos.FirstOrDefault(pi => pi.Name.Equals(propertyFromQueryName, StringComparison.InvariantCultureIgnoreCase));
-        //        if (objectProperty == null)
-        //            continue;
-
-        //        var sortingOrder = param.EndsWith(" desc") ? "descending" : "ascending";
-        //        orderQueryBuilder.Append($"{objectProperty.Name.ToString()} {sortingOrder}, ");
-        //    }
-        //    var orderQuery = orderQueryBuilder.ToString().TrimEnd(',', ' ');
-        //    if (string.IsNullOrWhiteSpace(orderQuery))
-        //    {
-        //        vMakes = vMakes.OrderBy(x => x.Name);
-        //        return;
-        //    }
-        //    //NEEDS System.Linq.Dynamic.Core NugetPackage !!!!------
-        //    vMakes = vMakes.OrderBy(orderQuery);
-        //}
+        private static void checkIfFilterStringIsNull(FilterParameters filterParameters, PageParameters pageParameters)
+        {
+            if (filterParameters.FilterString != null)
+            {
+                pageParameters.PageNumber = 1;
+            }
+            else
+            {
+                filterParameters.FilterString = filterParameters.CurrentFIlter;
+            }
+        }
 
         public async Task<GetVModelDto> GetSingleVModel(int makeId, int id)
         {

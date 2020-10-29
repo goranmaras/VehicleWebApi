@@ -36,10 +36,10 @@ namespace Service
             return vMakeDto;
         }
 
-        public async Task<List<GetVMakeDto>> FindAllVMakes(VMakeParameters vMakesParameters)
+        public async Task<List<GetVMakeDto>> FindAllVMakes(SortParameters sortParameters, FilterParameters filterParameters, PageParameters pageParameters)
         {
 
-            List<GetVMakeDto> allVMake = await _repositoryWrapper.VehicleMake.FindAllVMakes(vMakesParameters);
+            List<GetVMakeDto> allVMake = await _repositoryWrapper.VehicleMake.FindAllVMakes(sortParameters,filterParameters,pageParameters);
             return allVMake;
         }
 

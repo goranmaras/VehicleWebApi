@@ -33,11 +33,14 @@ namespace VehiclesApi.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("getall")]
-        public async Task<IActionResult> FindAllVMakes([FromQuery] VMakeParameters vMakesParameters)
+        [HttpGet]
+        public async Task<IActionResult> FindAllVMakes(string sortOrder, string currentFilter, string filterString, int pageNumber, int? pageSize)
         {
-            
-            List<MakeRestResponse> response = _mapper.Map<List<MakeRestResponse>>(await _makeService.FindAllVMakes(vMakesParameters));
+            var SortParameters = new SortParameters() { SortOrder = sortOrder };
+            var PageParameters = new PageParameters() { PageNumber = pageNumber, PageSize = pageSize ?? 5 };
+            var FilterParameters = new FilterParameters() { CurrentFIlter = currentFilter, FilterString = filterString };
+
+            List<MakeRestResponse> response = _mapper.Map<List<MakeRestResponse>>(await _makeService.FindAllVMakes(SortParameters,FilterParameters,PageParameters));
 
             if (response == null)
             {

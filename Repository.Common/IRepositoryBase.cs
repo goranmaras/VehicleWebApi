@@ -14,7 +14,7 @@ namespace Repository.Common
 {
     public interface IRepositoryBase<T> 
     {
-        Task<List<GetVMakeDto>> FindAllVMakes(VMakeParameters vMakesParameters);
+        Task<List<GetVMakeDto>> FindAllVMakes(SortParameters sortParameters, FilterParameters filterParameters, PageParameters pageParameters);
         Task<GetVMakeDto> GetVMakeById(int id);
         Task<GetVMakeDto> AddVMake(AddVMakeDto newVMake);
         Task<GetVMakeDto> UpdateVMake(UpdateVMakeDto updatedVMake);
