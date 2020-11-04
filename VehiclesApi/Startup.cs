@@ -15,6 +15,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Repository;
 using Repository.Common;
+using Repository.Common.Experimenting1;
+using Repository.Experimienting1;
 using Service;
 using Service.Common;
 
@@ -40,7 +42,7 @@ namespace VehiclesApi
             services.AddAutoMapper(typeof(Startup));
             services.AddScoped<IVMakeService, VMakeService>();
             services.AddScoped<IVModelService, VModelService>();
-            services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

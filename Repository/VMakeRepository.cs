@@ -3,33 +3,26 @@ using Common;
 using Common.Parameters;
 using DAL.Data;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 using Model;
 using Model.Dtos;
-using Model.Dtos.VModelDto;
-using Model.Models;
 using Repository.Common;
+using Repository.Common.Experimenting1;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-//Add this using For Problem in ApplySort Method-----!!!!!!
-using System.Linq.Dynamic.Core;
-using System.Linq.Expressions;
-using System.Reflection;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Repository
+namespace Repository.Experimienting1
 {
-    public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
+    public class VMakeRepository : GenericRepository<VehicleMake>, IVMakeRepository
     {
         private readonly DataContext _context;
         private readonly IMapper _mapper;
 
-        protected RepositoryBase(DataContext context, IMapper mapper)
+        public VMakeRepository(DataContext dataContext, IMapper mapper) : base(dataContext)
         {
-            _context = context;
+            _context = dataContext;
             _mapper = mapper;
         }
 
@@ -73,9 +66,37 @@ namespace Repository
                 }
 
             }
-
         }
 
+        public async Task<GetVMakeDto> GetVMakeById(int id)
+        {
+            VehicleMake vehicleMakeDb = await _context.VehicleMakes.FirstOrDefaultAsync(v => v.Id == id);
+
+            return _mapper.Map<GetVMakeDto>(vehicleMakeDb);
+        }
+
+        public async Task<GetVMakeDto> UpdateVMake(UpdateVMakeDto updatedVMake)
+        {
+            VehicleMake vehicleMake = await _context.VehicleMakes.FirstOrDefaultAsync(v => v.Id == updatedVMake.Id);
+
+            if (vehicleMake == null)
+            {
+                return _mapper.Map<GetVMakeDto>(vehicleMake);
+            }
+            else
+            {
+                vehicleMake.Name = updatedVMake.Name;
+                vehicleMake.Abrv = updatedVMake.Abrv;
+
+                _context.VehicleMakes.Update(vehicleMake);
+                await _context.SaveChangesAsync();
+
+                return _mapper.Map<GetVMakeDto>(vehicleMake);
+            }
+        }
+
+        #region VMakeRepository helper methods
+        //Helper methods
         private IQueryable<VehicleMake> sort(ISortParameters sortParameters, IQueryable<VehicleMake> vMakes)
         {
             switch (sortParameters.SortOrder)
@@ -130,42 +151,7 @@ namespace Repository
                 filterParameters.FilterString = filterParameters.CurrentFIlter;
             }
         }
+        #endregion
 
-        public async Task<GetVModelDto> GetSingleVModel(int makeId, int id)
-        {
-            VehicleMake vehicleMakeDb = await _context.VehicleMakes.Include(v => v.VehicleModels).FirstOrDefaultAsync(v => v.Id == makeId);
-            VehicleModel vehicleModelDb = vehicleMakeDb.VehicleModels.FirstOrDefault(v => v.Id == id);
-            return _mapper.Map<GetVModelDto>(vehicleModelDb);
-        }
-
-        public async Task<GetVMakeDto> GetVMakeById(int id)
-        {
-            VehicleMake vehicleMakeDb = await _context.VehicleMakes.FirstOrDefaultAsync(v => v.Id == id);
-
-            return _mapper.Map<GetVMakeDto>(vehicleMakeDb);
-        }
-
-        public async Task<GetVMakeDto> UpdateVMake(UpdateVMakeDto updatedVMake)
-        {
-
-            VehicleMake vehicleMake = await _context.VehicleMakes.FirstOrDefaultAsync(v => v.Id == updatedVMake.Id);
-
-            if (vehicleMake==null)
-            {
-               return _mapper.Map<GetVMakeDto>(vehicleMake);
-            }
-            else
-            {
-                vehicleMake.Name = updatedVMake.Name;
-                vehicleMake.Abrv = updatedVMake.Abrv;
-
-                _context.VehicleMakes.Update(vehicleMake);
-                await _context.SaveChangesAsync();
-
-                return _mapper.Map<GetVMakeDto>(vehicleMake);
-            }
-
-           
-        }
     }
 }

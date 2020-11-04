@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Model;
+using Model.Dtos;
 using Model.Dtos.VModelDto;
 using Model.Models;
 using Repository.Common;
+using Repository.Common.Experimenting1;
 using Service.Common;
 using System;
 using System.Collections.Generic;
@@ -14,20 +16,41 @@ namespace Service
 {
     public class VModelService : IVModelService
     {
-        private readonly IRepositoryWrapper _repositoryWrapper;
+        private readonly IUnitOfWork _iUnitOfWork;
         private readonly IMapper _mapper;
 
-        public VModelService(IRepositoryWrapper repositoryWrapper, IMapper mapper)
+        public VModelService(IUnitOfWork iUnitOfWork, IMapper mapper)
         {
-            _repositoryWrapper = repositoryWrapper;
+            _iUnitOfWork = iUnitOfWork;
             _mapper = mapper;
         }
-        public async Task<GetVModelDto> GetSingleVehicleModel(int makeId, int id) {
 
-            
-            var model = await _repositoryWrapper.VehicleModel.GetSingleVModel(makeId, id);
+        public async Task<GetVModelDto> AddVModel(AddVModelDto addVModelDto)
+        {
+            GetVModelDto vModelDto = await _iUnitOfWork.VehicleModels.AddVModel(addVModelDto);
+
+            return vModelDto;
+        }
+
+        public async Task<GetVModelDto> DeleteVModel(int makeId, int id)
+        {
+            var vModelDto = await _iUnitOfWork.VehicleModels.DeleteVModel(makeId, id);
+
+            return vModelDto;
+        }
+
+        public async Task<GetVModelDto> GetSingleVModel(int makeId, int id) {
+
+            var model = await _iUnitOfWork.VehicleModels.GetSingleVModel(makeId, id);
 
             return model;
+        }
+
+        public async Task<GetVModelDto> UpdateVModel(UpdateVModelDto updateVModelDto)
+        {
+            var vModelDto = await _iUnitOfWork.VehicleModels.UpdateVModel(updateVModelDto);
+
+            return vModelDto;
         }
     }
 }
