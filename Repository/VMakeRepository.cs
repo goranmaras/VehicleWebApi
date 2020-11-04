@@ -52,11 +52,11 @@ namespace Repository.Experimienting1
             {
                 try
                 {
-                    checkIfFilterStringIsNull(filterParameters, pageParameters);
+                    CheckIfFilterStringNull(filterParameters, pageParameters);
 
-                    vMakes = filterByFilterString(filterParameters);
+                    vMakes = FilterByString(filterParameters);
 
-                    vMakes = sort(sortParameters, vMakes);
+                    vMakes = SortParameters(sortParameters, vMakes);
 
                     return _mapper.Map<List<GetVMakeDto>>(await PagingList<VehicleMake>.CreateAsync(vMakes, pageParameters.PageNumber, pageParameters.PageSize ?? 5));
                 }
@@ -97,7 +97,7 @@ namespace Repository.Experimienting1
 
         #region VMakeRepository helper methods
         //Helper methods
-        private IQueryable<VehicleMake> sort(ISortParameters sortParameters, IQueryable<VehicleMake> vMakes)
+        private IQueryable<VehicleMake> SortParameters(ISortParameters sortParameters, IQueryable<VehicleMake> vMakes)
         {
             switch (sortParameters.SortOrder)
             {
@@ -125,7 +125,7 @@ namespace Repository.Experimienting1
             return vMakes;
         }
 
-        private IQueryable<VehicleMake> filterByFilterString(IFilterParameters filterParameters)
+        private IQueryable<VehicleMake> FilterByString(IFilterParameters filterParameters)
         {
             IQueryable<VehicleMake> vehicleMakes;
             if (!string.IsNullOrEmpty(filterParameters.FilterString))
@@ -140,7 +140,7 @@ namespace Repository.Experimienting1
             return vehicleMakes;
         }
 
-        private static void checkIfFilterStringIsNull(IFilterParameters filterParameters, IPageParameters pageParameters)
+        private static void CheckIfFilterStringNull(IFilterParameters filterParameters, IPageParameters pageParameters)
         {
             if (filterParameters.FilterString != null)
             {

@@ -45,5 +45,7 @@ namespace Repository.Common.Experimenting1
         {
             _context.Set<T>().RemoveRange(entities);
         }
+
+
     }
 }

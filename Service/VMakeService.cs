@@ -24,6 +24,9 @@ namespace Service
         public async Task<GetVMakeDto> AddVMake(AddVMakeDto newVMake)
         {
             GetVMakeDto vMake = await _iUnitOfWork.VehicleMakes.AddVMake(newVMake);
+
+            var someMake = await _iUnitOfWork.VehicleMakes.Add();
+
             return vMake;
         }
 
