@@ -25,8 +25,6 @@ namespace Service
         {
             GetVMakeDto vMake = await _iUnitOfWork.VehicleMakes.AddVMake(newVMake);
 
-            var someMake = await _iUnitOfWork.VehicleMakes.Add();
-
             return vMake;
         }
 
